@@ -59,7 +59,7 @@ int _printf(const char *format, ...)
 			}
 		}
 		else
-			_putchar(i);
+			continue;
 		i++;
 	}
 	va_end(list);
