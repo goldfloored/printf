@@ -79,28 +79,3 @@ int print_int(va_list arg)
 	count++;
 	return (count);
 }
-/**
-* toBi - function that binary
-* @arg: va_list
-* Return: number of elements printed
-*/
-int Bin(va_list arg)
-{
-	unsigned int temp, binary = 0, data, f = 1;
-	int result;
-
-	temp = va_arg(arg, int);
-	if (va_arg(arg, int) == 0)
-	{
-		return (0);
-	}
-	while (temp != 0)
-	{
-		data = temp % 2;
-		binary = binary + data * f;
-		f = f * 10;
-		temp = temp / 2;
-	}
-	result = print_binary_int(binary);
-	return (result);
-}

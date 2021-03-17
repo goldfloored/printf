@@ -8,7 +8,7 @@
  **/
 int _printf(const char *format, ...)
 {
-	unsigned int count = 0, i = 0;
+	unsigned int len = 0, i = 0;
 	int (*f)(va_list);
 	va_list list;
 
@@ -20,16 +20,16 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] != '%')
 		{
-			print_char(format[i]);
-			count++;
+			_putchar(format[i]);
+			len++;
 		}
 		else if (format[i] == '\0')
-			return (count);
+			return (len);
 		else if (format[i] == '%')
 		{
 			i += 1;
 			if (format[i] == "c")
-				print_char(format[i]);
+				_putchar(format[i]);
 			else if (format[i] == "s")
 				print_string(format[i]);
 			else
@@ -40,5 +40,5 @@ int _printf(const char *format, ...)
 		i++;
 	}
 	va_end(list);
-	return (count);
+	return (len);
 }
