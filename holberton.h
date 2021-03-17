@@ -16,4 +16,3 @@ int _putchar(char c);
 int print_char(va_list arg);
 int print_string(va_list arg);
 int print_int(va_list arg);
-int bin(va_list arg);

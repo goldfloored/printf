@@ -30,10 +30,33 @@ int _printf(const char *format, ...)
 			i += 1;
 			if (format[i] == "c")
 				_putchar(format[i]);
+			else if (format[i] == "d")
+				print_int(format[i]);
+			else if (format[i] == "i")
+				print_int(format[i]);
 			else if (format[i] == "s")
 				print_string(format[i]);
-			else
-				_putchar(i);
+			else if (format[i] != NULL)
+			{
+				i += 1;
+				if (format[i] == "n")
+					_putchar('\n');
+				else if(format[i] == "a")
+					_putchar('\a');
+				else if (format[i] == "t")
+					_putchar('\t');
+				else if (format[i] == "v")
+					_putchar('\v');
+				else if (format[i] == "r")
+					_putchar('\r');
+				else if (format[i] == "a")
+					_putchar('\a');
+				else if (format[i] == "b")
+					_putchar('\b');
+				else
+					i += 1;
+					_putchar(i);
+			}
 		}
 		else
 			_putchar(i);
