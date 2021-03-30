@@ -1,3 +1,5 @@
+#ifndef HOLBERTON
+#define HOLBERTON
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -23,7 +25,7 @@ char *rev_string(char *s);
 char *_memcpy(char *dest, char *src, unsigned int n);
 char hex_digit(int v);
 int alloc_len(int num, int base);
-char* itoa(unsigned int num, char* str, int base);
+char *itoa(unsigned int num, char *str, int base);
 
 int print_char(va_list arg);
 int print_string(va_list arg);
@@ -39,3 +41,4 @@ int carriage_return(va_list);
 int form_feed(va_list arg);
 int print_tab(va_list arg);
 int print_percent(va_list arg);
+#endif
