@@ -1,67 +1,140 @@
-#include <stdio.h>
-#include <stdarg.h>
 #include "holberton.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdarg.h>
 /**
- * _printf - prints anything
- * @format: pointer to string that contains specifiers
- * Return: number of characters printed
- **/
-int _printf(const char *format, ...)
+* _strlen - returns the length of a string.
+* @s: parameter
+* Return: Always 0.
+**/
+int _strlen(const char *s)
 {
-	unsigned int len = 0, i = 0;
-	int (*f)(va_list);
-	va_list list;
+	int i = 0;
 
-
-	if (format == NULL)
-		return (-1);
-	va_start(list, format);
-	while (format && format[i])
+	while (s[i] != '\0')
 	{
-		if (format[i] != '%')
+		i++;
+	}
+	return (i);
+}
+/**
+ * format_resolve - function that matches the format
+ * @c: the format c
+ * @arguments: pointer to arguments
+ * Return: the number of printed chars
+**/
+int format_resolve(char c, va_list arguments)
+{
+	match_conversion f_list[] = {
+		{"c", print_char},
+		{"s", print_string},
+		{"d", print_int},
+		{"i", print_int},
+		{"b", print_bin},
+		{"%", print_percent},
+		{"n", new_line},
+		{"r", print_rev},
+		{"f", form_feed},
+		{"t", print_tab},
+		{"R", print_rot13},
+		{"x", print_hex},
+		{"o", print_octale},
+		{NULL, NULL}
+	};
+	int i = 0;
+	int printed;
+	int (*func_ptr_frmt)(va_list);
+
+	while (f_list[i].c != NULL)
+	{
+		if (f_list[i].c[0] == c)
 		{
-			_putchar(format[i]);
-			len++;
+			func_ptr_frmt = f_list[i].f;
+			printed = func_ptr_frmt(arguments);
+			return (printed);
 		}
-		else if (format[i] == '\0')
-			return (len);
-		else if (format[i] == '%')
+		else
 		{
-			i += 1;
-			if (format[i] == "c")
-				_putchar(format[i]);
-			else if (format[i] == "d")
-				print_int(format[i]);
-			else if (format[i] == "i")
-				print_int(format[i]);
-			else if (format[i] == "s")
-				print_string(format[i]);
-			else if (format[i] != NULL)
+			i++;
+		}
+	}
+	return (-1);
+}
+/**
+ * parser - function that will parse the given format
+ * @format: the format to be parsed
+ * @arguments: pointer to arguments
+ * Return: the number of printed chars in count1
+**/
+int parser(const char *format, va_list arguments)
+{
+	char v;
+	int i, sum;
+	int printed_chars = 0;
+
+	for (i = 0; format[i] != '\0'; i++)
+	{
+		if (*(format + i) == '%' || *(format + i) == '\\')
+		{
+			v = *(format + i + 1);
+			sum = format_resolve(v, arguments);
+			if (sum == -1) /* no match was found */
 			{
-				i += 1;
-				if (format[i] == "n")
-					_putchar('\n');
-				else if(format[i] == "a")
-					_putchar('\a');
-				else if (format[i] == "t")
-					_putchar('\t');
-				else if (format[i] == "v")
-					_putchar('\v');
-				else if (format[i] == "r")
-					_putchar('\r');
-				else if (format[i] == "a")
-					_putchar('\a');
-				else if (format[i] == "b")
-					_putchar('\b');
-				else
-					i += 1;
-					_putchar(i);
+				_putchar(*(format + i));
+				_putchar(*(format + i + 1));
+				printed_chars = printed_chars + 2;
+				i++;
+				if (*(format + i) == '\0')
+				{
+					return (-1);
+				}
+			}
+			else
+			{
+				printed_chars = printed_chars + sum;
+				i++;
+				if (*(format + i) == '\0')
+				{
+					return (-1);
+				}
 			}
 		}
 		else
-			continue;
-		i++;
+		{
+			_putchar(*(format + i));
+			printed_chars++;
+		}
 	}
-	va_end(list);
-	return (len);
+return (printed_chars);
+}
+/**
+* _printf - function that produces output according to a format.
+* @format: is a character string
+* Return: count of characters in format
+*/
+int _printf(const char *format, ...)
+{
+	int final_count;
+	va_list arguments;
+
+	if (!format || arguments == NULL)
+	{
+		return (-1);
+	}
+	if (format[0] == '%' && !format[1])
+	{
+		return (-1);
+	}
+	if (format == NULL)
+	{
+		return (-1);
+	}
+	else
+	{
+		va_start(arguments, format);
+		final_count = parser(format, arguments);
+	}
+
+	va_end(arguments);
+	return (final_count);
 }
